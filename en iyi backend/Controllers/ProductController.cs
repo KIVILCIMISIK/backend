@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using en_iyi_backend.Data;
 using en_iyi_backend.Model;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace en_iyi_backend.Controllers
@@ -21,26 +22,35 @@ namespace en_iyi_backend.Controllers
         [HttpPost]
         public JsonResult CreateEdit(Product product)
         {
-            if (product.Id == 0)
-            {
+           // if (product.Id == 0)
+           // {
                 _datacontext.Products.Add(product);
-            }
-            else
-            {
+           // }
+           // else
+          //  {
                 var productInDb = _datacontext.Products.Find(product.Id);
 
                 if (productInDb == null)
                     return new JsonResult(NotFound());
 
                 productInDb = product;
-            }
+           // }
 
             _datacontext.SaveChanges();
 
             return new JsonResult(Ok(product));
 
         }
-      
+        [HttpGet]
+        public JsonResult Get(int id)
+        {
+            var result = _datacontext.Products.Find(id);
+
+            if (result == null)
+                return new JsonResult(NotFound());
+
+            return new JsonResult(Ok(result));
+        }
 
         // Delete
         [HttpDelete]
@@ -57,8 +67,7 @@ namespace en_iyi_backend.Controllers
             return new JsonResult(NoContent());
         }
 
-        // Get all
-        [HttpGet]
+        [HttpGet("GetAll")]
         public JsonResult GetAll()
         {
             var result = _datacontext.Products.ToList();
