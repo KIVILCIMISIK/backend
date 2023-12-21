@@ -45,6 +45,7 @@ namespace en_iyi_backend.Controllers
         public JsonResult Get(int id)
         {
             var result = _datacontext.Products.Find(id);
+            
 
             if (result == null)
                 return new JsonResult(NotFound());
